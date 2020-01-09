@@ -1,12 +1,16 @@
 Summary: Gives a fake chroot environment
 Name: fakechroot
 Version: 2.9
-Release: 24.1%{?dist}
+Release: 24.2%{?dist}
 License: LGPLv2+
 Group: Development/Tools
 URL: http://fakechroot.alioth.debian.org/
 Source0: http://ftp.debian.org/debian/pool/main/f/fakechroot/%{name}_%{version}.orig.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+
+# Only needed to build libguestfs, and that is only built on x86-64.
+ExclusiveArch: x86_64
+
 Requires: fakechroot-libs = %{version}-%{release}
 
 # Required for patch0:
@@ -76,6 +80,9 @@ rm -rf %{buildroot}
 %{_libdir}/fakechroot/libfakechroot.so
 
 %changelog
+* Mon Jan 17 2011 Richard W.M. Jones <rjones@redhat.com> - 2.9-24.2
+- ExclusiveArch x86_64 (RHBZ#598451).
+
 * Mon Nov 30 2009 Dennis Gregorovic <dgregor@redhat.com> - 2.9-24.1
 - Rebuilt for RHEL 6
 
