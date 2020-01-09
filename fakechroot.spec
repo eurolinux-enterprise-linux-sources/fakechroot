@@ -1,15 +1,12 @@
 Summary: Gives a fake chroot environment
 Name: fakechroot
 Version: 2.9
-Release: 24.2%{?dist}
+Release: 24.5%{?dist}.1
 License: LGPLv2+
 Group: Development/Tools
 URL: http://fakechroot.alioth.debian.org/
 Source0: http://ftp.debian.org/debian/pool/main/f/fakechroot/%{name}_%{version}.orig.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-
-# Only needed to build libguestfs, and that is only built on x86-64.
-ExclusiveArch: x86_64
 
 Requires: fakechroot-libs = %{version}-%{release}
 
@@ -27,6 +24,9 @@ Patch1: fakechroot-cmd-subst.patch
 # real reason AFAICT.  This means the package breaks everytime
 # a new version of automake is released. - RWMJ.
 Patch2: fakechroot-no-automake-version.patch
+
+# Fix multilib (RHBZ#598451).
+Patch3: fakechroot-fix-multilib.patch
 
 %description
 fakechroot runs a command in an environment were is additionally
@@ -48,6 +48,7 @@ This package contains the libraries required by %{name}.
 %patch0 -p0
 %patch1 -p0
 %patch2 -p1
+%patch3 -p1
 
 # Patch0 updates autoconf, so rerun this:
 ./autogen.sh
@@ -80,6 +81,11 @@ rm -rf %{buildroot}
 %{_libdir}/fakechroot/libfakechroot.so
 
 %changelog
+* Mon Aug 15 2011 Richard W.M. Jones <rjones@redhat.com> - 2.9-24.5.el6.1
+- Properly fix multilib issue in shell script /usr/bin/fakechroot
+  and remove ExclusiveArch.
+  resolves: rhbz#730647
+
 * Mon Jan 17 2011 Richard W.M. Jones <rjones@redhat.com> - 2.9-24.2
 - ExclusiveArch x86_64 (RHBZ#598451).
 
